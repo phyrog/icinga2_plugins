@@ -15,6 +15,7 @@ if test -z "$out"; then
 	fi
   exit 2
 else
-	>&2 echo $out
+  date=$(sudo docker inspect -f "{{.State.StartedAt}}" $DOCKER_CONTAINER | cut -d' ' -f1-3)
+	>&2 echo "$out | uptime=$(($(date +%s)-$(date --date="$date" +%s)))s"
 	exit 0
 fi
