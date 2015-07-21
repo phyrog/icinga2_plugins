@@ -1,16 +1,19 @@
 #!/bin/bash
 out=$(sudo docker ps -f name=$DOCKER_CONTAINER -f status=running -q)
 
+if (( $? != 0 )); then
+  exit 3
+fi
+
 if test -z "$out"; then
 	existing=$(sudo docker ps -a -f name=$DOCKER_CONTAINER -q)
 
 	if test -z "$existing"; then
 		>&2 echo "No such container exists."
-		exit 3
 	else
 		>&2 echo "Container not running."
-		exit 2
 	fi
+  exit 2
 else
 	>&2 echo $out
 	exit 0
